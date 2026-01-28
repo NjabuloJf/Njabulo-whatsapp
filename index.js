@@ -18,6 +18,15 @@ const sessionData = pairData.replace(/<[^>]*>/g, '').trim();
 const logger = pino({ level: "silent" });
 const express = require('express');
 const app = express();
+const path = require('path');
+const __path = path.join(__dirname);
+const server = require('./pair');
+
+app.use(express.static(__path));
+app.use('/server', server);
+app.get('/pair', (req, res) => {
+  res.sendFile(__path + '/pair.html');
+});
 
 const port = process.env.PORT || 10000;
 
@@ -28,9 +37,9 @@ app.listen(port, '0.0.0.0', () => {
 async function authentification() {
   try {
     if (!fs.existsSync(__dirname + "/auth/creds.json")) {
-      await fs.writeFileSync(__dirname + "/auth/creds.json", sessionData, "utf8");
+      fs.writeFileSync(__dirname + "/auth/creds.json", sessionData, "utf8");
     } else if (fs.existsSync(__dirname + "/auth/creds.json") && sessionData != "") {
-      await fs.writeFileSync(__dirname + "/auth/creds.json", sessionData, "utf8");
+      fs.writeFileSync(__dirname + "/auth/creds.json", sessionData, "utf8");
     }
   } catch (e) {
     console.log("Error reading pair.html file: " + e);
@@ -89,6 +98,14 @@ setTimeout(() => {
         await (new Promise(resolve => setTimeout(resolve, 300)));
         console.log("------------------/-----");
         console.log("DULLAH XMD is Online 🕸\n\n");
+        console.log("Loading Njabulo Jb Commands ...\n");
+        fs.readdirSync(__dirname + "/commandes").forEach((fichier) => {
+          if (path.extname(fichier).toLowerCase() == (".js")) {
+            // load the commande
+            require(__dirname + "/commandes/" + fichier)(zk);
+            console.log(fichier + " Loaded ✅");
+          }
+        });
         let cmsg = `
           ┊ *ᯤɴᴊᴀʙᴜʟᴏ ᴊʙ: ᴄᴏɴɴᴇᴄᴛᴇᴅ*
           ┊┊ *ɴᴀᴍᴇ ɴᴊᴀʙᴜʟᴏ ᴊʙ*
@@ -120,4 +137,3 @@ setTimeout(() => {
 
   main();
 }, 3000);
-
