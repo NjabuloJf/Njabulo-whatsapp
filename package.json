@@ -1,6 +1,6 @@
 
 {
-  "name": "Njabulo_Jb",
+  "name": "Njabulo-whatsapp",
   "version": "2.0.0",
   "description": "",
   "main": "index.js",
@@ -13,10 +13,10 @@
   "keywords": [
     "bot",
     "Baileys",
-    "Njablo_Jb",
+    "Njabulo-whatsapp",
     "whatsapp",
     "whatsapp-bot",
-    "raheem-md-boy"
+    "Njabulo-md-boy"
   ],
   "author": "heroku",
   "license": "ISC",
