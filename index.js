@@ -16,6 +16,14 @@ const { reagir } = require(__dirname + "/njabulo/app");
 const pairData = fs.readFileSync(__dirname + "/pair.html", "utf8");
 const sessionData = pairData.replace(/<[^>]*>/g, '').trim();
 const logger = pino({ level: "silent" });
+const express = require('express');
+const app = express();
+
+const port = process.env.PORT || 10000;
+
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server running on port ${port}`);
+});
 
 async function authentification() {
   try {
@@ -112,3 +120,4 @@ setTimeout(() => {
 
   main();
 }, 3000);
+
