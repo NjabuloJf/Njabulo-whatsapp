@@ -20,10 +20,8 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const __path = path.join(__dirname);
-const server = require('./pair');
 
 app.use(express.static(__path));
-app.use('/server', server);
 app.get('/pair', (req, res) => {
   res.sendFile(__path + '/pair.html');
 });
