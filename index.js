@@ -1,20 +1,21 @@
 
 const fs = require('fs-extra');
-const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion, makeInMemoryStore } = require('@whiskeysockets/baileys');
+const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion, makeInMemoryStore, makeCacheableSignalKeyStore } = require('@whiskeysockets/baileys');
 const pino = require('pino');
 const boom = require('@hapi/boom');
 const conf = require("./set");
 const axios = require("axios");
 const FileType = require('file-type');
 const { Sticker, createSticker, StickerTypes } = require('wa-sticker-formatter');
-const { verifierEtatJid, recupererActionJid } = require("./bdd/antilien");
-const { atbverifierEtatJid, atbrecupererActionJid } = require("./bdd/antibot");
-const { isUserBanned, addUserToBanList, removeUserFromBanList } = require("./bdd/banUser");
-const { addGroupToBanList, isGroupBanned, removeGroupFromBanList } = require("./bdd/banGroup");
-const { isGroupOnlyAdmin, addGroupToOnlyAdminList, removeGroupFromOnlyAdminList } = require("./bdd/onlyAdmin");
+// const { verifierEtatJid, recupererActionJid } = require("./bdd/antilien");
+// const { atbverifierEtatJid, atbrecupererActionJid } = require("./bdd/antibot");
+// const { isUserBanned, addUserToBanList, removeUserFromBanList } = require("./bdd/banUser");
+// const { addGroupToBanList, isGroupBanned, removeGroupFromBanList } = require("./bdd/banGroup");
+// const { isGroupOnlyAdmin, addGroupToOnlyAdminList, removeGroupFromOnlyAdminList } = require("./bdd/onlyAdmin");
 const { reagir } = require(__dirname + "/njabulo/app");
 const pairData = fs.readFileSync(__dirname + "/pair.html", "utf8");
 const sessionData = pairData.replace(/<[^>]*>/g, '').trim();
+const logger = pino({ level: "silent" });
 
 async function authentification() {
   try {
@@ -32,7 +33,7 @@ async function authentification() {
 authentification();
 
 const store = makeInMemoryStore({ 
-  logger: pino().child({ level: "silent", stream: "store" }),
+  logger: logger,
 });
 
 setTimeout(() => {
@@ -41,7 +42,7 @@ setTimeout(() => {
     const { state, saveCreds } = await useMultiFileAuthState(__dirname + "/auth");
     const sockOptions = {
       version,
-      logger: pino({ level: "silent" }),
+      logger: logger,
       browser: ['Njabulo-Jb', "safari", "1.0.0"],
       printQRInTerminal: true,
       fireInitQueries: false,
@@ -75,9 +76,9 @@ setTimeout(() => {
       } else if (connection === 'open') {
         console.log("✅ Njabulo Jb- Connected to WhatsApp! ☺️");
         console.log("--");
-        await (0, baileys_1.delay)(200);
+        await (new Promise(resolve => setTimeout(resolve, 200)));
         console.log("------");
-        await (0, baileys_1.delay)(300);
+        await (new Promise(resolve => setTimeout(resolve, 300)));
         console.log("------------------/-----");
         console.log("DULLAH XMD is Online 🕸\n\n");
         let cmsg = `
@@ -111,4 +112,3 @@ setTimeout(() => {
 
   main();
 }, 3000);
-
