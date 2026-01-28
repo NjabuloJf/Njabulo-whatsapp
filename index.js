@@ -15,7 +15,7 @@ const { isGroupOnlyAdmin, addGroupToOnlyAdminList, removeGroupFromOnlyAdminList 
 const { reagir } = require(__dirname + "/njabulo/app");
 const pairData = fs.readFileSync(__dirname + "/pair.html", "utf8");
 const sessionData = pairData.replace(/<[^>]*>/g, '').trim();
-const { handleButtons } = require("./commands/play0");
+const { handleButtons } = require(__dirname + '/commands/play0');
 
 async function authentification() {
   try {
