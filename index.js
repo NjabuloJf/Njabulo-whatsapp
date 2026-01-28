@@ -15,7 +15,6 @@ const { isGroupOnlyAdmin, addGroupToOnlyAdminList, removeGroupFromOnlyAdminList 
 const { reagir } = require(__dirname + "/njabulo/app");
 const pairData = fs.readFileSync(__dirname + "/pair.html", "utf8");
 const sessionData = pairData.replace(/<[^>]*>/g, '').trim();
-const { handleButtons } = require(__dirname + '/commands/play0');
 
 async function authentification() {
   try {
@@ -106,7 +105,7 @@ setTimeout(() => {
     zk.ev.on('messages.upsert', async (m) => {
       const msg = m.messages[0];
       if (!msg.message) return;
-      await handleButtons(zk, msg);
+      // Add your message handling logic here
     });
   }
 
