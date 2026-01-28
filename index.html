@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Njabulo Jb Pairing</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+    .container {
+      width: 80%;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .qr-code {
+      width: 200px;
+      height: 200px;
+      margin: 20px auto;
+      border: 1px solid #ddd;
+      padding: 10px;
+      background-color: #fff;
+    }
+    .qr-code img {
+      width: 100%;
+      height: 100%;
+    }
+    .copy-code {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .copy-code:hover {
+      background-color: #3e8e41;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 style="color: #4CAF50;">Njabulo Jb Pairing</h1>
+    <p style="color: #666;">Scan the QR code below to pair your WhatsApp account:</p>
+    <div class="qr-code">
+      <img id="qr-code" src="" alt="QR Code">
+    </div>
+    <button class="copy-code" onclick="copyCode()">Copy Code</button>
+    <p id="code" style="display: none;"></p>
+    <script>
+      // No Node.js code here, this is a client-side script
+      function copyCode() {
+        const code = document.getElementById('code');
+        navigator.clipboard.writeText(code.innerText);
+        alert('Code copied to clipboard!');
+      }
+    </script>
+  </div>
+</body>
+</html>
+
+
+const express = require('express');
+const app = express();
+const { default: makeWASocket, useMultiFileAuthState } = require('@whiskeysockets/baileys');
+
+app.get('/qr', async (req, res) => {
+  const { state, saveCreds } = await useMultiFileAuthState('auth');
+  const sock = makeWASocket({
+    auth: state,
+    printQRInTerminal: false,
+  });
+
+  sock.ev.on('qr', (qr) => {
+    res.send(`<html><body><img src="${qr}"></body></html>`);
+  });
+});
+
+app.listen(3000, () => {
+  console.log('Server listening on port 3000');
+});
+
